@@ -51,74 +51,66 @@ const useStyles = makeStyles((theme) => ({
 
 const PAGES = [
   {
-    title: 'products',
-    href: '/dashboard/products',
+    title: 'portal',
+    href: '/portal',
     icon: <ShoppingBasketIcon />
   },
   {
     title: 'users',
-    href: '/dashboard/users',
+    href: '/users',
     icon: <PeopleIcon />
   }
 ]
 
-const DashboardSidebarContent = ({ user, onLogout, onLogin }) => {
+const SidebarContent = ({ user, onLogout, onLogin, setOpenSidebar }) => {
   const classes = useStyles()
   const { t } = useTranslation('translations')
 
   return (
-    <>
-      <List className={classes.nav}>
-        {PAGES.map((page) => (
-          <ListItem className={classes.item} disableGutters key={page.title}>
-            <Button
-              activeClassName={classes.active}
-              className={classes.button}
-              component={CustomRouterLink}
-              to={page.href}
-            >
-              <div className={classes.icon}>{page.icon}</div>
-              {t(page.title)}
-            </Button>
-          </ListItem>
-        ))}
-        {!user && (
-          <ListItem className={classes.item} disableGutters>
-            <Button
-              className={classes.button}
-              color="inherit"
-              onClick={onLogin}
-            >
-              <div className={classes.icon}>
-                <FingerprintIcon />
-              </div>
-              {t('login')}
-            </Button>
-          </ListItem>
-        )}
-        {user && (
-          <ListItem className={classes.item} disableGutters key="logoutOption">
-            <Button
-              className={classes.button}
-              color="inherit"
-              onClick={onLogout}
-            >
-              <div className={classes.icon}>
-                <InputIcon />
-              </div>
-              {t('logout')}
-            </Button>
-          </ListItem>
-        )}
-      </List>
-    </>
+    <List className={classes.nav}>
+      {PAGES.map((page) => (
+        <ListItem className={classes.item} disableGutters key={page.title}>
+          <Button
+            activeClassName={classes.active}
+            className={classes.button}
+            component={CustomRouterLink}
+            to={page.href}
+            onClick={() => setOpenSidebar(false)}
+          >
+            <div className={classes.icon}>{page.icon}</div>
+            {t(page.title)}
+          </Button>
+        </ListItem>
+      ))}
+      {!user && (
+        <ListItem className={classes.item} disableGutters>
+          <Button className={classes.button} color="inherit" onClick={onLogin}>
+            <div className={classes.icon}>
+              <FingerprintIcon />
+            </div>
+            {t('login')}
+          </Button>
+        </ListItem>
+      )}
+      {user && (
+        <ListItem className={classes.item} disableGutters key="logoutOption">
+          <Button className={classes.button} color="inherit" onClick={onLogout}>
+            <div className={classes.icon}>
+              <InputIcon />
+            </div>
+            {t('logout')}
+          </Button>
+        </ListItem>
+      )}
+    </List>
   )
 }
 
-DashboardSidebarContent.propTypes = {
+SidebarContent.propTypes = {
   user: PropTypes.object,
   onLogout: PropTypes.func,
-  onLogin: PropTypes.func
+  onLogin: PropTypes.func,
+  setOpenSidebar: PropTypes.func
 }
 
-export default DashboardSidebarContent
+export default SidebarContent
