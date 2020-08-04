@@ -23,16 +23,18 @@ const useStyles = makeStyles((theme) => ({
     overflowY: 'auto',
     outlineWidth: 0,
     [theme.breakpoints.up('sm')]: {
-      height: '80%',
+      height: '58%',
       width: '70%'
     }
   },
   closeIcon: {
     display: 'flex',
     justifyContent: 'flex-end',
+    marginTop: 10,
+    padding: theme.spacing(0, 1.5),
     '& svg': {
       fontSize: 25,
-      color: theme.palette.secondary.main
+      color: 'rgba(0, 0, 0, 0.54)'
     }
   },
   bodyWrapper: {

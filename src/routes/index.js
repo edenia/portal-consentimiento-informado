@@ -1,11 +1,11 @@
-import Dashboard from './Dashboard'
 import NotFound from './NotFound'
+import Portal from './Portal'
 
 export default [
   {
-    name: 'dashboard',
-    path: '/dashboard',
-    component: Dashboard
+    name: 'portal',
+    path: '/portal',
+    component: Portal
   },
   {
     name: 'notFound',

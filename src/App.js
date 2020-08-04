@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom'
-
 import routes from './routes'
 
 const App = ({ ual }) => (
@@ -12,7 +11,7 @@ const App = ({ ual }) => (
           <Component ual={ual} />
         </Route>
       ))}
-      <Redirect exact from="/" to="/dashboard" />
+      <Redirect exact from="/" to="/portal" />
       <Redirect to="/not-found" />
     </Switch>
   </BrowserRouter>

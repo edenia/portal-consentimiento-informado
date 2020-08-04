@@ -5,6 +5,8 @@
     "products": "Products",
     "productsTitle": "Products list",
     "usersTitle": "Users list",
-    "logout": "Logout"
+    "logout": "Logout",
+    "accessible": "Accessible",
+    "help": "Help"
   }
 }

@@ -3,13 +3,12 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import IconButton from '@material-ui/core/IconButton'
-import { useTranslation } from 'react-i18next'
 import FingerprintIcon from '@material-ui/icons/Fingerprint'
 import LogoutIcon from '@material-ui/icons/ExitToApp'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
-
-import LanguageSelector from '../../components/LanguageSelector'
+import ContactSupportIcon from '@material-ui/icons/ContactSupport'
+import AccessibleIcon from '@material-ui/icons/Accessible'
 
 const useStyles = makeStyles((theme) => ({
   sessionText: {
@@ -31,19 +30,30 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const DashboardTopbar = ({ user, onLogout, onLogin }) => {
+const Topbar = ({ user, onLogout, onLogin, setOpenLoginModal }) => {
   const classes = useStyles()
-  const { t } = useTranslation('translations')
+  const userName = localStorage.getItem('username')
 
   return (
     <Box className={classes.box}>
-      <LanguageSelector />
-      {user && (
+      <IconButton color="inherit">
+        <AccessibleIcon />
+        <Typography className={classes.sessionText} variant="subtitle1">
+          ACCESIBILIDAD
+        </Typography>
+      </IconButton>
+      <IconButton color="inherit">
+        <ContactSupportIcon />
+        <Typography className={classes.sessionText} variant="subtitle1">
+          AYUDA
+        </Typography>
+      </IconButton>
+      {userName && (
         <Box>
           <IconButton color="inherit">
             <AccountCircleIcon />
             <Typography className={classes.sessionText} variant="subtitle1">
-              {user.accountName}
+              {userName}
             </Typography>
           </IconButton>
           <IconButton color="inherit" onClick={onLogout}>
@@ -51,11 +61,11 @@ const DashboardTopbar = ({ user, onLogout, onLogin }) => {
           </IconButton>
         </Box>
       )}
-      {!user && (
-        <IconButton color="inherit" onClick={onLogin}>
+      {!userName && (
+        <IconButton color="inherit" onClick={() => setOpenLoginModal(true)}>
           <FingerprintIcon />
           <Typography className={classes.sessionText} variant="subtitle1">
-            {t('login')}
+            INGRESO
           </Typography>
         </IconButton>
       )}
@@ -63,10 +73,11 @@ const DashboardTopbar = ({ user, onLogout, onLogin }) => {
   )
 }
 
-DashboardTopbar.propTypes = {
+Topbar.propTypes = {
   user: PropTypes.object,
   onLogout: PropTypes.func,
-  onLogin: PropTypes.func
+  onLogin: PropTypes.func,
+  setOpenLoginModal: PropTypes.func
 }
 
-export default DashboardTopbar
+export default Topbar

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Link as RouterLink } from 'react-router-dom'
@@ -8,16 +8,16 @@ import Container from '@material-ui/core/Container'
 import Drawer from '@material-ui/core/Drawer'
 import Toolbar from '@material-ui/core/Toolbar'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
-import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
+import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(11),
+    padding: 0,
     display: 'flex'
   },
   appBar: {
-    boxShadow: 'none'
+    boxShadow: 'none',
+    backgroundColor: '#0071b3'
   },
   logo: {
     height: 36
@@ -42,42 +42,54 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.white,
     height: '100%',
     padding: theme.spacing(2)
+  },
+  logoName: {
+    fontSize: 15,
+    color: '#fff',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    [theme.breakpoints.up('sm')]: {
+      fontSize: 24
+    },
+    [theme.breakpoints.up('lg')]: {
+      // width: 298
+    }
+  },
+  link: {
+    textDecoration: 'none',
+    width: '40%'
+  },
+  backgroundTransparent: {
+    backgroundColor: 'transparent'
   }
 }))
 
-const Main = ({ children, sidebarContent, topbarContent }) => {
+const Main = ({
+  children,
+  sidebarContent,
+  topbarContent,
+  openSidebar,
+  setOpenSidebar,
+  useTranparentBackground
+}) => {
   const classes = useStyles()
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'), {
     defaultMatches: true
   })
 
-  const [openSidebar, setOpenSidebar] = useState(false)
-
   return (
-    <Container
-      component="main"
-      maxWidth="xl"
-      className={clsx({
-        [classes.root]: true
-      })}
-    >
-      <AppBar className={classes.appBar}>
+    <Container component="main" maxWidth="xl" className={classes.root}>
+      <AppBar className={clsx(classes.appBar)}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            onClick={() => setOpenSidebar(!openSidebar)}
-            className={classes.drawerToggle}
-          >
-            <MenuIcon />
-          </IconButton>
-          <RouterLink to="/">
-            <img
-              className={classes.logo}
-              alt="Logo"
-              src="https://eoscostarica.io/wp-content/uploads/2019/07/EOSCRlogo-main-darkOverWhite-1.png"
-            />
-          </RouterLink>
+          {!useTranparentBackground && (
+            <RouterLink className={classes.link} to="/portal">
+              <Typography variant="h5" className={classes.logoName}>
+                Consentimiento informado
+              </Typography>
+            </RouterLink>
+          )}
           {topbarContent}
         </Toolbar>
       </AppBar>
@@ -86,7 +98,7 @@ const Main = ({ children, sidebarContent, topbarContent }) => {
         classes={{ paper: classes.drawerPaper }}
         onClose={() => setOpenSidebar(false)}
         open={openSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
+        variant="temporary"
         className={clsx({
           [classes.drawer]: true,
           [classes.drawerDesktop]: isDesktop && openSidebar
@@ -102,7 +114,10 @@ const Main = ({ children, sidebarContent, topbarContent }) => {
 Main.propTypes = {
   children: PropTypes.node,
   sidebarContent: PropTypes.node,
-  topbarContent: PropTypes.node
+  topbarContent: PropTypes.node,
+  openSidebar: PropTypes.bool,
+  setOpenSidebar: PropTypes.func,
+  useTranparentBackground: PropTypes.bool
 }
 
 export default Main
