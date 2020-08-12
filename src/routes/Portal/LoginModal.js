@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-
 import TextField from '@material-ui/core/TextField'
 
 import Modal from '../../components/Modal'
@@ -73,7 +72,29 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginModal = ({ openModal, setOpenModal, onLogin }) => {
   const classes = useStyles()
-  const [userLogin, setUserLogin] = useState()
+  const [userLogin, setUserLogin] = useState('')
+  const [loginError, setLoginError] = useState({
+    user: { isError: false, message: '' },
+    password: { isError: false, message: 'Usuario o contraseña incorrecto' }
+  })
+
+  const handlerSetData = () => {
+    if (!userLogin) {
+      setLoginError({
+        user: { ...loginError.user, isError: true },
+        password: { ...loginError.password, isError: true }
+      })
+
+      return
+    }
+
+    setLoginError({
+      user: { ...loginError.user, isError: false },
+      password: { ...loginError.password, isError: false }
+    })
+
+    onLogin(userLogin)
+  }
 
   return (
     <Modal openModal={openModal} setOpenModal={(value) => setOpenModal(value)}>
@@ -90,23 +111,25 @@ const LoginModal = ({ openModal, setOpenModal, onLogin }) => {
         <Box className={classes.inputs}>
           <form noValidate autoComplete="off">
             <TextField
+              error={loginError.user.isError}
               label="Usuario"
-              variant="outlined"
+              variant="filled"
               onChange={(e) => setUserLogin(e.target.value)}
             />
             <TextField
+              error={loginError.password.isError}
+              helperText={
+                loginError.password.isError ? loginError.password.message : ''
+              }
               label="Contraseña"
-              variant="outlined"
+              variant="filled"
               type="password"
               autoComplete="current-password"
             />
           </form>
         </Box>
 
-        <Button
-          className={classes.btnPortal}
-          onClick={() => onLogin(userLogin)}
-        >
+        <Button className={classes.btnPortal} onClick={handlerSetData}>
           Ingresar
         </Button>
         <Typography variant="h3" className={classes.link}>

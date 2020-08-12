@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { makeStyles, useTheme } from '@material-ui/styles'
-// import { Backdrop } from '@eoscostarica/eoscr-components'
 import {
   Route,
   Redirect,
@@ -10,18 +9,17 @@ import {
   useLocation,
   useHistory
 } from 'react-router-dom'
+import { Backdrop } from '@eoscostarica/eoscr-components'
 
 import { MainContainer } from '../../containers'
 import portalBG from '../../assets/portalBG.png'
-import Backdrop from '../../components/Backdrop'
 
 import LoginModal from './LoginModal'
 import ConsentModal from './ConsentModal'
 import SideBar from './SideBar'
 import TopBar from './TopBar'
-import BackLayer from './BackLayer'
-import { Home } from './Home'
-import { ConsentPage } from './Consent'
+import { Home, HomeBackLayer } from './Home'
+import { ConsentPage, ConsentBackLayer } from './Consent'
 
 const useStyles = makeStyles((theme) => ({
   backdrop: {
@@ -95,7 +93,7 @@ const Portal = ({ ual }) => {
 
   const [openSidebar, setOpenSidebar] = useState(false)
   const [useTranparentBackground, setUseTranparentBackground] = useState(false)
-  const [layerHeight, setLayerHeight] = useState(85)
+  const [layerHeight, setLayerHeight] = useState(0)
   const [openLoginModal, setOpenLoginModal] = useState(false)
   const [openConsentModal, setOpenConsentModal] = useState(false)
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'), {
@@ -118,6 +116,20 @@ const Portal = ({ ual }) => {
     localStorage.setItem(key, value)
   }
 
+  const backLayer = (
+    <div className={classes.frontLayer}>
+      <Switch>
+        <Route exact path="/portal/home">
+          <HomeBackLayer setOpenLoginModal={setOpenLoginModal} />
+        </Route>
+        <Route exact path="/portal/consent">
+          <ConsentBackLayer />
+        </Route>
+        <Redirect from="/portal" to="/portal/home" />
+      </Switch>
+    </div>
+  )
+
   const frontLayer = (
     <div className={classes.frontLayer}>
       <Switch>
@@ -134,14 +146,14 @@ const Portal = ({ ual }) => {
 
   useEffect(() => {
     if (isMobile && location.pathname === '/portal/home') {
-      setLayerHeight(85)
+      setLayerHeight(100)
       setUseTranparentBackground(true)
 
       return
     }
 
     if (!isMobile && location.pathname === '/portal/home') {
-      setLayerHeight(85)
+      setLayerHeight(850)
       setUseTranparentBackground(true)
 
       return
@@ -178,17 +190,12 @@ const Portal = ({ ual }) => {
             root: classes.portalBG,
             headerBox: classes.headerBoxNone
           }}
-          backLayer={
-            <BackLayer
-              pathname={location.pathname}
-              setOpenLoginModal={setOpenLoginModal}
-            />
-          }
+          backLayer={backLayer}
           frontLayer={frontLayer}
           backgroundColor="#1976d2"
-          layerHeight={layerHeight}
-          isStaticPage
-          startCollapsible={useTranparentBackground}
+          layerHeightUp={layerHeight}
+          layerHeightDown={100}
+          isStaticPage={false}
         />
         <LoginModal
           openModal={openLoginModal}
