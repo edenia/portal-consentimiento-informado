@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('lg')]: {
       width: 320,
       height: 40,
-      marginTop: -200
+      marginTop: -100
     }
   },
   portalTitle: {
@@ -49,7 +49,8 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.up('lg')]: {
       fontSize: 76,
-      letterSpacing: -1.19
+      letterSpacing: -1.19,
+      width: 904
     }
   },
   boxSvg: {
@@ -102,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
       height: 230
     },
     [theme.breakpoints.up('lg')]: {
-      height: 500
+      height: 350
     }
   }
 }))
@@ -127,6 +128,7 @@ const HomeBackLayer = ({ setOpenLoginModal }) => {
       </Box>
       <Box className={classes.btnBox}>
         <Button
+          variant="contained"
           className={classes.btnPortal}
           onClick={() => setOpenLoginModal(true)}
         >

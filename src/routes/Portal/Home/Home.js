@@ -54,6 +54,7 @@ const Home = ({ setOpenLoginModal }) => {
         con su firma electrónica.
       </Typography>
       <Button
+        variant="contained"
         startIcon={<FingerprintIcon />}
         className={classes.btnPortal}
         onClick={() => setOpenLoginModal(true)}

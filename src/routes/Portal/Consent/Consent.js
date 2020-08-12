@@ -136,8 +136,8 @@ const ConsentPage = ({ setOpenConsentModal }) => {
                 {data === 'denied' ? ' Denegado' : ' Aprobado'}
               </Typography>
               <Typography>
-                <strong>Última actualización:</strong> 08:12:07am, lunes 4 de
-                agosto, 2020
+                <strong>Última actualización:</strong> 02:12:07pm, miercoles 12
+                de agosto, 2020
               </Typography>
               <Typography>
                 <strong>Descripción:</strong> Acceso a datos médicos

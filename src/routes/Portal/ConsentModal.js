@@ -143,6 +143,7 @@ const ConsentModal = ({ openModal, setOpenModal, onChangeConsent }) => {
             cancelar
           </Button>
           <Button
+            variant="contained"
             className={classes.btnConsentModalSave}
             onClick={() => onChangeConsent('data', value)}
           >
