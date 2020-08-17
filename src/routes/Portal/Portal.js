@@ -15,6 +15,7 @@ import { MainContainer } from '../../containers'
 import portalBG from '../../assets/portalBG.png'
 
 import LoginModal from './LoginModal'
+import HistoryModal from './HistoryModal'
 import ConsentModal from './ConsentModal'
 import SideBar from './SideBar'
 import TopBar from './TopBar'
@@ -94,26 +95,41 @@ const Portal = ({ ual }) => {
   const [openSidebar, setOpenSidebar] = useState(false)
   const [useTranparentBackground, setUseTranparentBackground] = useState(false)
   const [layerHeight, setLayerHeight] = useState(0)
+  const [consentSelected, setConsentSelected] = useState({})
+  const [historySelected, setHistorySelected] = useState([])
   const [openLoginModal, setOpenLoginModal] = useState(false)
+  const [openHistoryModal, setOpenHistoryModal] = useState(false)
   const [openConsentModal, setOpenConsentModal] = useState(false)
   const isMobile = useMediaQuery(theme.breakpoints.down('xs'), {
     defaultMatches: true
   })
 
-  const handleLogin = (values) => {
+  const handleLogin = () => {
     setOpenLoginModal(false)
-    localStorage.setItem('username', values)
     history.push('/portal/consent')
   }
 
   const handleLogout = () => {
-    localStorage.setItem('username', '')
+    localStorage.setItem('user', '')
     history.push('/portal/home')
   }
 
-  const handleChangeConsent = (key, value) => {
+  const handleChangeConsent = (consentUpdated) => {
     setOpenConsentModal(false)
-    localStorage.setItem(key, value)
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    const history = user.history[consentSelected.key]
+
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        ...user,
+        consent: { ...user.consent, [consentSelected.key]: consentUpdated },
+        history: {
+          ...user.history,
+          [consentSelected.key]: [...history, consentUpdated]
+        }
+      })
+    )
   }
 
   const backLayer = (
@@ -137,7 +153,12 @@ const Portal = ({ ual }) => {
           <Home setOpenLoginModal={setOpenLoginModal} />
         </Route>
         <Route exact path="/portal/consent">
-          <ConsentPage setOpenConsentModal={setOpenConsentModal} />
+          <ConsentPage
+            setOpenConsentModal={setOpenConsentModal}
+            setConsentSelected={setConsentSelected}
+            setHistorySelected={setHistorySelected}
+            setOpenHistoryModal={setOpenHistoryModal}
+          />
         </Route>
         <Redirect from="/portal" to="/portal/home" />
       </Switch>
@@ -195,7 +216,7 @@ const Portal = ({ ual }) => {
           backgroundColor="#1976d2"
           layerHeightUp={layerHeight}
           layerHeightDown={100}
-          isStaticPage={false}
+          isStaticPage={!useTranparentBackground}
         />
         <LoginModal
           openModal={openLoginModal}
@@ -206,6 +227,12 @@ const Portal = ({ ual }) => {
           openModal={openConsentModal}
           setOpenModal={setOpenConsentModal}
           onChangeConsent={handleChangeConsent}
+          consentSelected={consentSelected.data || {}}
+        />
+        <HistoryModal
+          openModal={openHistoryModal}
+          setOpenModal={setOpenHistoryModal}
+          historySelected={historySelected}
         />
       </div>
     </MainContainer>
