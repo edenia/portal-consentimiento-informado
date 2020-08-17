@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       height: '58%',
       width: '70%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      height: '58%',
+      width: 530
     }
   },
   closeIcon: {

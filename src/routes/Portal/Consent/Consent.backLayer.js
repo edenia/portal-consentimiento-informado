@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       fontSize: 76,
       letterSpacing: -1.19
-    },
-    [theme.breakpoints.up('lg')]: {
-      // width: 298
     }
   },
   userId: {
@@ -31,23 +28,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('sm')]: {
       fontSize: 20,
       letterSpacing: 0.25
-    },
-    [theme.breakpoints.up('lg')]: {
-      // width: 298
     }
   }
 }))
 
 const ConsentBackLayer = () => {
   const classes = useStyles()
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   return (
     <Box className={classes.consentContent}>
       <Typography variant="h1" className={classes.userName}>
-        Pedro González Leiva
+        {user.name}
       </Typography>
       <Typography variant="h3" className={classes.userId}>
-        Cédula: 1-2054-0549 | Otros…
+        {`Cédula: ${user.ced} | Otros…`}
       </Typography>
     </Box>
   )

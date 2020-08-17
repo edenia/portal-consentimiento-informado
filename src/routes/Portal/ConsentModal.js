@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box'
@@ -89,14 +89,29 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const ConsentModal = ({ openModal, setOpenModal, onChangeConsent }) => {
+const ConsentModal = ({
+  openModal,
+  setOpenModal,
+  onChangeConsent,
+  consentSelected
+}) => {
   const classes = useStyles()
-  const data = localStorage.getItem('data')
-  const [value, setValue] = useState(data || 'allow')
+  const [value, setValue] = useState('false')
 
   const handleChange = (event) => {
     setValue(event.target.value)
   }
+
+  const handleChangeConsent = () => {
+    onChangeConsent({
+      status: value === 'true' || false,
+      updatedTo: `${new Date()}`
+    })
+  }
+
+  useEffect(() => {
+    setValue(`${consentSelected.status}` || 'false')
+  }, [openModal])
 
   return (
     <Modal openModal={openModal} setOpenModal={(value) => setOpenModal(value)}>
@@ -123,12 +138,12 @@ const ConsentModal = ({ openModal, setOpenModal, onChangeConsent }) => {
           <FormControl component="fieldset">
             <RadioGroup name="consent" value={value} onChange={handleChange}>
               <FormControlLabel
-                value="allow"
+                value="true"
                 control={<Radio className={classes.radioInput} />}
                 label="Apruebo el consentimiento informado"
               />
               <FormControlLabel
-                value="denied"
+                value="false"
                 control={<Radio className={classes.radioInput} />}
                 label="Niego el consentimiento informado"
               />
@@ -145,7 +160,7 @@ const ConsentModal = ({ openModal, setOpenModal, onChangeConsent }) => {
           <Button
             variant="contained"
             className={classes.btnConsentModalSave}
-            onClick={() => onChangeConsent('data', value)}
+            onClick={handleChangeConsent}
           >
             Guardar
           </Button>
@@ -158,7 +173,8 @@ const ConsentModal = ({ openModal, setOpenModal, onChangeConsent }) => {
 ConsentModal.propTypes = {
   openModal: PropTypes.bool,
   setOpenModal: PropTypes.func,
-  onChangeConsent: PropTypes.func
+  onChangeConsent: PropTypes.func,
+  consentSelected: PropTypes.object
 }
 
 export default ConsentModal

@@ -30,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const Topbar = ({ user, onLogout, onLogin, setOpenLoginModal }) => {
+const Topbar = ({ onLogout, onLogin, setOpenLoginModal }) => {
   const classes = useStyles()
-  const userName = localStorage.getItem('username')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
 
   return (
     <Box className={classes.box}>
@@ -48,12 +48,12 @@ const Topbar = ({ user, onLogout, onLogin, setOpenLoginModal }) => {
           AYUDA
         </Typography>
       </IconButton>
-      {userName && (
+      {user.username && (
         <Box>
           <IconButton color="inherit">
             <AccountCircleIcon />
             <Typography className={classes.sessionText} variant="subtitle1">
-              {userName}
+              {user.username}
             </Typography>
           </IconButton>
           <IconButton color="inherit" onClick={onLogout}>
@@ -61,7 +61,7 @@ const Topbar = ({ user, onLogout, onLogin, setOpenLoginModal }) => {
           </IconButton>
         </Box>
       )}
-      {!userName && (
+      {!user.username && (
         <IconButton color="inherit" onClick={() => setOpenLoginModal(true)}>
           <FingerprintIcon />
           <Typography className={classes.sessionText} variant="subtitle1">
@@ -74,7 +74,6 @@ const Topbar = ({ user, onLogout, onLogin, setOpenLoginModal }) => {
 }
 
 Topbar.propTypes = {
-  user: PropTypes.object,
   onLogout: PropTypes.func,
   onLogin: PropTypes.func,
   setOpenLoginModal: PropTypes.func

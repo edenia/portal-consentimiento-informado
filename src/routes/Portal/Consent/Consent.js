@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import { makeStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
-import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
 import AccordionDetails from '@material-ui/core/AccordionDetails'
@@ -29,6 +29,22 @@ const useStyles = makeStyles((theme) => ({
       lineHeight: '16px',
       letterSpacing: 1.25,
       fontWeight: '500'
+    }
+  },
+  btnConsentHistory: {
+    backgroundColor: '#0071b3',
+    width: 138,
+    height: 36,
+    borderRadius: 20,
+    '& .MuiButton-label': {
+      color: '#fff',
+      fontSize: 14,
+      lineHeight: '16px',
+      letterSpacing: 1.25,
+      fontWeight: '500'
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(2)
     }
   },
   btnBox: {
@@ -100,9 +116,28 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const ConsentPage = ({ setOpenConsentModal }) => {
+const ConsentPage = ({
+  setOpenConsentModal,
+  setConsentSelected,
+  setHistorySelected,
+  setOpenHistoryModal
+}) => {
   const classes = useStyles()
-  const data = localStorage.getItem('data')
+  const user = JSON.parse(localStorage.getItem('user') || '{}')
+  const options = {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }
+
+  const getFormatDate = (date) => {
+    const consentDate = new Date(date)
+
+    return ` ${consentDate.toLocaleTimeString(
+      'es-ES'
+    )}, ${consentDate.toLocaleDateString('es-ES', options)}`
+  }
 
   return (
     <Box className={classes.consent}>
@@ -119,7 +154,7 @@ const ConsentPage = ({ setOpenConsentModal }) => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box className={classes.accordionOption}>
-              {data === 'denied' ? (
+              {!user.consent.accessToMedicalData.status ? (
                 <HighlightOffIcon className={classes.deniedPermission} />
               ) : (
                 <CheckCircleIcon className={classes.successPermission} />
@@ -133,11 +168,13 @@ const ConsentPage = ({ setOpenConsentModal }) => {
             <Box className={classes.details}>
               <Typography>
                 <strong>Estatus:</strong>
-                {data === 'denied' ? ' Denegado' : ' Aprobado'}
+                {!user.consent.accessToMedicalData.status
+                  ? ' Denegado'
+                  : ' Aprobado'}
               </Typography>
               <Typography>
-                <strong>Última actualización:</strong> 02:12:07pm, miercoles 12
-                de agosto, 2020
+                <strong>Última actualización:</strong>
+                {getFormatDate(user.consent.accessToMedicalData.updatedTo)}
               </Typography>
               <Typography>
                 <strong>Descripción:</strong> Acceso a datos médicos
@@ -148,9 +185,24 @@ const ConsentPage = ({ setOpenConsentModal }) => {
               <Box className={classes.btnBox}>
                 <Button
                   className={classes.btnConsent}
-                  onClick={() => setOpenConsentModal(true)}
+                  onClick={() => {
+                    setConsentSelected({
+                      key: 'accessToMedicalData',
+                      data: user.consent.accessToMedicalData
+                    })
+                    setOpenConsentModal(true)
+                  }}
                 >
                   modificar
+                </Button>
+                <Button
+                  className={classes.btnConsentHistory}
+                  onClick={() => {
+                    setHistorySelected(user.history.accessToMedicalData)
+                    setOpenHistoryModal(true)
+                  }}
+                >
+                  ver historial
                 </Button>
               </Box>
             </Box>
@@ -159,7 +211,11 @@ const ConsentPage = ({ setOpenConsentModal }) => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box className={classes.accordionOption}>
-              <CheckCircleIcon className={classes.successPermission} />
+              {!user.consent.accessToMedicalDataThirdParties.status ? (
+                <HighlightOffIcon className={classes.deniedPermission} />
+              ) : (
+                <CheckCircleIcon className={classes.successPermission} />
+              )}
               <Typography className={classes.heading}>
                 Acceso a datos médicos para terceros
               </Typography>
@@ -168,11 +224,16 @@ const ConsentPage = ({ setOpenConsentModal }) => {
           <AccordionDetails>
             <Box className={classes.details}>
               <Typography>
-                <strong>Estatus:</strong> Denegado
+                <strong>Estatus:</strong>
+                {!user.consent.accessToMedicalDataThirdParties.status
+                  ? ' Denegado'
+                  : ' Aprobado'}
               </Typography>
               <Typography>
-                <strong>Última actualización:</strong> 08:12:07am, lunes 6 de
-                julio, 2020
+                <strong>Última actualización:</strong>
+                {getFormatDate(
+                  user.consent.accessToMedicalDataThirdParties.updatedTo
+                )}
               </Typography>
               <Typography>
                 <strong>Descripción:</strong> Acceso a datos médicos
@@ -183,9 +244,26 @@ const ConsentPage = ({ setOpenConsentModal }) => {
               <Box className={classes.btnBox}>
                 <Button
                   className={classes.btnConsent}
-                  onClick={() => setOpenConsentModal(true)}
+                  onClick={() => {
+                    setConsentSelected({
+                      key: 'accessToMedicalDataThirdParties',
+                      data: user.consent.accessToMedicalDataThirdParties
+                    })
+                    setOpenConsentModal(true)
+                  }}
                 >
                   modificar
+                </Button>
+                <Button
+                  className={classes.btnConsentHistory}
+                  onClick={() => {
+                    setHistorySelected(
+                      user.history.accessToMedicalDataThirdParties
+                    )
+                    setOpenHistoryModal(true)
+                  }}
+                >
+                  ver historial
                 </Button>
               </Box>
             </Box>
@@ -194,7 +272,11 @@ const ConsentPage = ({ setOpenConsentModal }) => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box className={classes.accordionOption}>
-              <HighlightOffIcon className={classes.deniedPermission} />
+              {!user.consent.accessToMedicalRecord.status ? (
+                <HighlightOffIcon className={classes.deniedPermission} />
+              ) : (
+                <CheckCircleIcon className={classes.successPermission} />
+              )}
               <Typography className={classes.heading}>
                 Acceso a expediente en caso de emergencia
               </Typography>
@@ -203,11 +285,14 @@ const ConsentPage = ({ setOpenConsentModal }) => {
           <AccordionDetails>
             <Box className={classes.details}>
               <Typography>
-                <strong>Estatus:</strong> Denegado
+                <strong>Estatus:</strong>
+                {!user.consent.accessToMedicalRecord.status
+                  ? ' Denegado'
+                  : ' Aprobado'}
               </Typography>
               <Typography>
-                <strong>Última actualización:</strong> 08:12:07am, lunes 6 de
-                julio, 2020
+                <strong>Última actualización:</strong>
+                {getFormatDate(user.consent.accessToMedicalRecord.updatedTo)}
               </Typography>
               <Typography>
                 <strong>Descripción:</strong> Acceso a datos médicos
@@ -218,9 +303,24 @@ const ConsentPage = ({ setOpenConsentModal }) => {
               <Box className={classes.btnBox}>
                 <Button
                   className={classes.btnConsent}
-                  onClick={() => setOpenConsentModal(true)}
+                  onClick={() => {
+                    setConsentSelected({
+                      key: 'accessToMedicalRecord',
+                      data: user.consent.accessToMedicalRecord
+                    })
+                    setOpenConsentModal(true)
+                  }}
                 >
                   modificar
+                </Button>
+                <Button
+                  className={classes.btnConsentHistory}
+                  onClick={() => {
+                    setHistorySelected(user.history.accessToMedicalRecord)
+                    setOpenHistoryModal(true)
+                  }}
+                >
+                  ver historial
                 </Button>
               </Box>
             </Box>
@@ -229,7 +329,11 @@ const ConsentPage = ({ setOpenConsentModal }) => {
         <Accordion>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             <Box className={classes.accordionOption}>
-              <HighlightOffIcon className={classes.deniedPermission} />
+              {!user.consent.accessToMedicalRecordThirdParties.status ? (
+                <HighlightOffIcon className={classes.deniedPermission} />
+              ) : (
+                <CheckCircleIcon className={classes.successPermission} />
+              )}
               <Typography className={classes.heading}>
                 Acceso a expediente para terceros
               </Typography>
@@ -238,11 +342,16 @@ const ConsentPage = ({ setOpenConsentModal }) => {
           <AccordionDetails>
             <Box className={classes.details}>
               <Typography>
-                <strong>Estatus:</strong> Denegado
+                <strong>Estatus:</strong>
+                {!user.consent.accessToMedicalRecordThirdParties.status
+                  ? ' Denegado'
+                  : ' Aprobado'}
               </Typography>
               <Typography>
-                <strong>Última actualización:</strong> 08:12:07am, lunes 6 de
-                julio, 2020
+                <strong>Última actualización:</strong>
+                {getFormatDate(
+                  user.consent.accessToMedicalRecordThirdParties.updatedTo
+                )}
               </Typography>
               <Typography>
                 <strong>Descripción:</strong> Acceso a datos médicos
@@ -253,9 +362,26 @@ const ConsentPage = ({ setOpenConsentModal }) => {
               <Box className={classes.btnBox}>
                 <Button
                   className={classes.btnConsent}
-                  onClick={() => setOpenConsentModal(true)}
+                  onClick={() => {
+                    setConsentSelected({
+                      key: 'accessToMedicalRecordThirdParties',
+                      data: user.consent.accessToMedicalRecordThirdParties
+                    })
+                    setOpenConsentModal(true)
+                  }}
                 >
                   modificar
+                </Button>
+                <Button
+                  className={classes.btnConsentHistory}
+                  onClick={() => {
+                    setHistorySelected(
+                      user.history.accessToMedicalRecordThirdParties
+                    )
+                    setOpenHistoryModal(true)
+                  }}
+                >
+                  ver historial
                 </Button>
               </Box>
             </Box>
@@ -267,7 +393,10 @@ const ConsentPage = ({ setOpenConsentModal }) => {
 }
 
 ConsentPage.propTypes = {
-  setOpenConsentModal: PropTypes.func
+  setOpenConsentModal: PropTypes.func,
+  setConsentSelected: PropTypes.func,
+  setHistorySelected: PropTypes.func,
+  setOpenHistoryModal: PropTypes.func
 }
 
 export default ConsentPage

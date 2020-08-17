@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 
 import Modal from '../../components/Modal'
+import handleFakeLogin from '../../utils/login.utils'
 
 const useStyles = makeStyles((theme) => ({
   loginContent: {
@@ -73,13 +74,18 @@ const useStyles = makeStyles((theme) => ({
 const LoginModal = ({ openModal, setOpenModal, onLogin }) => {
   const classes = useStyles()
   const [userLogin, setUserLogin] = useState('')
+  const [passwordLogin, setPasswordLogin] = useState('')
   const [loginError, setLoginError] = useState({
     user: { isError: false, message: '' },
     password: { isError: false, message: 'Usuario o contraseña incorrecto' }
   })
 
   const handlerSetData = () => {
-    if (!userLogin) {
+    if (
+      !userLogin ||
+      !passwordLogin ||
+      !handleFakeLogin({ username: userLogin, password: passwordLogin })
+    ) {
       setLoginError({
         user: { ...loginError.user, isError: true },
         password: { ...loginError.password, isError: true }
@@ -93,7 +99,7 @@ const LoginModal = ({ openModal, setOpenModal, onLogin }) => {
       password: { ...loginError.password, isError: false }
     })
 
-    onLogin(userLogin)
+    onLogin()
   }
 
   return (
@@ -125,6 +131,7 @@ const LoginModal = ({ openModal, setOpenModal, onLogin }) => {
               variant="filled"
               type="password"
               autoComplete="current-password"
+              onChange={(e) => setPasswordLogin(e.target.value)}
             />
           </form>
         </Box>
