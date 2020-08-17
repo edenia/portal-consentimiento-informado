@@ -96,7 +96,7 @@ const ConsentModal = ({
   consentSelected
 }) => {
   const classes = useStyles()
-  const [value, setValue] = useState(false)
+  const [value, setValue] = useState('false')
 
   const handleChange = (event) => {
     setValue(event.target.value)
@@ -110,7 +110,7 @@ const ConsentModal = ({
   }
 
   useEffect(() => {
-    setValue(consentSelected.status || false)
+    setValue(`${consentSelected.status}` || 'false')
   }, [openModal])
 
   return (
