@@ -66,9 +66,9 @@ const USER_TEST = [
     }
   },
   {
-    name: 'Carmen Rodriguez Villanueva',
-    ced: '5-0543-0493',
-    username: 'carmenrvilla',
+    name: 'Nancy Castillo Mora',
+    ced: '1-0870-0237',
+    username: 'nancycasmor',
     password: 'portal0000',
     consent: {
       accessToMedicalData: {
