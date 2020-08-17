@@ -111,7 +111,7 @@ const ConsentModal = ({
 
   useEffect(() => {
     setValue(`${consentSelected.status}` || 'false')
-  }, [openModal])
+  }, [openModal, consentSelected.status])
 
   return (
     <Modal openModal={openModal} setOpenModal={(value) => setOpenModal(value)}>
