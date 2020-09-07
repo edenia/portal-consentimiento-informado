@@ -138,6 +138,80 @@ const USER_TEST = [
         }
       ]
     }
+  },
+  {
+    name: 'Marta González González',
+    ced: '1-0054-0489',
+    username: 'martagongon',
+    password: 'portal0000',
+    consent: {
+      accessToMedicalData: {
+        status: false,
+        updatedTo: 'Sun Aug 11 2020 11:06:54'
+      },
+      accessToMedicalDataThirdParties: {
+        status: false,
+        updatedTo: 'Sun Aug 11 2020 16:00:00'
+      },
+      accessToMedicalRecord: {
+        status: false,
+        updatedTo: 'Sun Aug 11 2020 16:06:54'
+      },
+      accessToMedicalRecordThirdParties: {
+        status: true,
+        updatedTo: 'Sun Aug 10 2020 09:00:00'
+      }
+    },
+    history: {
+      accessToMedicalData: [
+        {
+          status: false,
+          updatedTo: 'Sun Aug 11 2020 11:06:54'
+        },
+        {
+          status: false,
+          updatedTo: 'Sun Aug 9 2020 10:00:00'
+        },
+        {
+          status: true,
+          updatedTo: 'Sun Aug 3 2020 15:30:00'
+        }
+      ],
+      accessToMedicalDataThirdParties: [
+        {
+          status: false,
+          updatedTo: 'Sun Aug 11 2020 11:06:54'
+        },
+        {
+          status: false,
+          updatedTo: 'Sun Aug 9 2020 10:00:00'
+        }
+      ],
+      accessToMedicalRecord: [
+        {
+          status: false,
+          updatedTo: 'Sun Aug 11 2020 11:06:54'
+        },
+        {
+          status: true,
+          updatedTo: 'Sun Aug 9 2020 10:00:00'
+        },
+        {
+          status: false,
+          updatedTo: 'Sun Aug 3 2020 15:30:00'
+        }
+      ],
+      accessToMedicalRecordThirdParties: [
+        {
+          status: false,
+          updatedTo: 'Sun Aug 11 2020 11:06:54'
+        },
+        {
+          status: true,
+          updatedTo: 'Sun Aug 9 2020 10:00:00'
+        }
+      ]
+    }
   }
 ]
 
